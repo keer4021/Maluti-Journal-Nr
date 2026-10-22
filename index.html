@@ -98,21 +98,22 @@ $('nb').onclick=()=>{const b=prompt('Book name (e.g. MVK27):');if(!b)return;
  const p=prompt('Prefix (e.g. 2027N-):','');S.books[b]=p||'';S.cur=b;save();render()};
 function dl(data,type,name){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type}));a.download=name;a.click()}
 const today=()=>new Date().toISOString().slice(0,10);
+const now=()=>{const d=new Date(),p=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes())};
 $('ex').onclick=()=>{const c=v=>'"'+String(v).replace(/"/g,'""')+'"';
  const s=$('xs').value,q=$('q').value.toLowerCase(),f=$('xf').value,t=$('xt').value;
  const rows=S.rows.filter(r=>(s!=='cur'||r.bk===S.cur)&&(s!=='q'||!q||(r.jr+' '+r.o).toLowerCase().includes(q))&&(!f||r.d>=f)&&(!t||r.d<=t));
  if(!rows.length){alert('No entries to export.');return}
  const csv='﻿JR Date;Book;JR No.;Description\n'+rows.map(r=>[fmt(r.d),r.bk,r.jr,r.o].map(c).join(';')).join('\n');
  dl(csv,'text/csv','Journal References'+(s==='cur'?' '+S.cur:'')+' '+today()+'.csv')};
-function showLb(){$('lb').textContent=S.lastBackup?'Last backup: '+fmt(S.lastBackup):'No backup made yet'}
-$('bu').onclick=async()=>{const name='JR Backup '+today()+'.json';
- const json=JSON.stringify({app:'JR Numbers',version:'26.3',date:today(),data:{...S,lastBackup:today()}},null,1);
+function showLb(){const b=S.lastBackup;$('lb').textContent=b?'Last backup: '+fmt(b.slice(0,10))+b.slice(10):'No backup made yet'}
+$('bu').onclick=async()=>{const t=now(),name='JR Backup '+t.replace(':','h')+'.json';
+ const json=JSON.stringify({app:'JR Numbers',version:'26.3',date:t,data:{...S,lastBackup:t}},null,1);
  if(window.showSaveFilePicker){
   try{const h=await showSaveFilePicker({suggestedName:name,id:'jr-backup',startIn:'documents',types:[{description:'JR Backup',accept:{'application/json':['.json']}}]});
    const w=await h.createWritable();await w.write(json);await w.close()}
   catch(e){if(e.name!=='AbortError')alert('Could not save the backup: '+e.message);return}
  }else dl(json,'application/json',name);
- S.lastBackup=today();save();showLb()};
+ S.lastBackup=t;save();showLb()};
 $('rs').onclick=()=>$('rf').click();
 $('rf').onchange=async e=>{const fl=e.target.files[0];e.target.value='';if(!fl)return;
  try{const j=JSON.parse(await fl.text()),d=j.data||j;
