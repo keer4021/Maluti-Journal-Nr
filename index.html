@@ -27,7 +27,7 @@ h1 small{font-size:12px;font-weight:400;color:var(--mut);margin-left:6px}
 .bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .bar .mut{font-size:12px;color:var(--mut);margin-left:auto}
 </style></head><body><main>
-<h1>JR References<small>v26.2</small></h1>
+<h1>JR References<small>v26.3</small></h1>
 <div class="card">
  <div class="row" style="margin-bottom:10px">
   <label>Export<select id="xs"><option value="all">All books</option><option value="cur">Current book</option><option value="q">Search results</option></select></label>
@@ -105,8 +105,14 @@ $('ex').onclick=()=>{const c=v=>'"'+String(v).replace(/"/g,'""')+'"';
  const csv='﻿JR Date;Book;JR No.;Description\n'+rows.map(r=>[fmt(r.d),r.bk,r.jr,r.o].map(c).join(';')).join('\n');
  dl(csv,'text/csv','Journal References'+(s==='cur'?' '+S.cur:'')+' '+today()+'.csv')};
 function showLb(){$('lb').textContent=S.lastBackup?'Last backup: '+fmt(S.lastBackup):'No backup made yet'}
-$('bu').onclick=()=>{S.lastBackup=today();save();showLb();
- dl(JSON.stringify({app:'JR Numbers',version:'26.2',date:today(),data:S},null,1),'application/json','JR Backup '+today()+'.json')};
+$('bu').onclick=async()=>{const name='JR Backup '+today()+'.json';
+ const json=JSON.stringify({app:'JR Numbers',version:'26.3',date:today(),data:{...S,lastBackup:today()}},null,1);
+ if(window.showSaveFilePicker){
+  try{const h=await showSaveFilePicker({suggestedName:name,id:'jr-backup',startIn:'documents',types:[{description:'JR Backup',accept:{'application/json':['.json']}}]});
+   const w=await h.createWritable();await w.write(json);await w.close()}
+  catch(e){if(e.name!=='AbortError')alert('Could not save the backup: '+e.message);return}
+ }else dl(json,'application/json',name);
+ S.lastBackup=today();save();showLb()};
 $('rs').onclick=()=>$('rf').click();
 $('rf').onchange=async e=>{const fl=e.target.files[0];e.target.value='';if(!fl)return;
  try{const j=JSON.parse(await fl.text()),d=j.data||j;

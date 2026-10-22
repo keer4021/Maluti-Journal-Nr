@@ -2,7 +2,7 @@
   "name": "JR Numbers",
   "short_name": "JR Numbers",
   "description": "Assign journal reference (JR) numbers and keep a record.",
-  "version": "26.2",
+  "version": "26.3",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

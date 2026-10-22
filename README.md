@@ -1,4 +1,4 @@
-﻿# JR Numbers — v26.2
+﻿# JR Numbers — v26.3
 
 Assign journal reference (JR) numbers and keep a record of them.
 
@@ -8,7 +8,7 @@ Assign journal reference (JR) numbers and keep a record of them.
 3. The app gets its own window, a desktop/Start shortcut, and also works offline.
 
 ## Backup and export
-- **Create backup** downloads a `.json` file with all data. **Restore from backup** loads it back in.
+- **Create backup** asks where to save a `.json` file with all data (it remembers the last folder). **Restore from backup** loads it back in.
 - **Export to Excel (CSV)** exports all books, only the current book, or the search results, with an optional date range.
 
 Data is stored locally in the browser/app; make a backup regularly.
