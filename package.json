@@ -1,0 +1,31 @@
+{
+  "name": "jr-numbers",
+  "productName": "JR Numbers",
+  "version": "26.4.0",
+  "description": "Assign journal reference (JR) numbers and keep a record.",
+  "author": "Maluti",
+  "license": "MIT",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win nsis"
+  },
+  "devDependencies": {
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "za.maluti.jrnumbers",
+    "productName": "JR Numbers",
+    "files": ["main.js", "index.html", "manifest.json", "icon-192.png", "icon-512.png"],
+    "win": { "icon": "icon-512.png", "target": "nsis" },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "JR Numbers",
+      "artifactName": "JR-Numbers-Setup-${version}.exe"
+    }
+  }
+}

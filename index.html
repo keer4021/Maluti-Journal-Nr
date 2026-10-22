@@ -27,7 +27,7 @@ h1 small{font-size:12px;font-weight:400;color:var(--mut);margin-left:6px}
 .bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .bar .mut{font-size:12px;color:var(--mut);margin-left:auto}
 </style></head><body><main>
-<h1>JR References<small>v26.3</small></h1>
+<h1>JR References<small>v26.4</small></h1>
 <div class="card">
  <div class="row" style="margin-bottom:10px">
   <label>Export<select id="xs"><option value="all">All books</option><option value="cur">Current book</option><option value="q">Search results</option></select></label>
@@ -107,7 +107,7 @@ $('ex').onclick=()=>{const c=v=>'"'+String(v).replace(/"/g,'""')+'"';
  dl(csv,'text/csv','Journal References'+(s==='cur'?' '+S.cur:'')+' '+today()+'.csv')};
 function showLb(){const b=S.lastBackup;$('lb').textContent=b?'Last backup: '+fmt(b.slice(0,10))+b.slice(10):'No backup made yet'}
 $('bu').onclick=async()=>{const t=now(),name='JR Backup '+t.replace(':','h')+'.json';
- const json=JSON.stringify({app:'JR Numbers',version:'26.3',date:t,data:{...S,lastBackup:t}},null,1);
+ const json=JSON.stringify({app:'JR Numbers',version:'26.4',date:t,data:{...S,lastBackup:t}},null,1);
  if(window.showSaveFilePicker){
   try{const h=await showSaveFilePicker({suggestedName:name,id:'jr-backup',startIn:'documents',types:[{description:'JR Backup',accept:{'application/json':['.json']}}]});
    const w=await h.createWritable();await w.write(json);await w.close()}
