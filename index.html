@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="af"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>JR Nommers</title>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JR Numbers</title>
 <link rel="manifest" href="manifest.json"><meta name="theme-color" content="#1f6f4a"><link rel="icon" href="icon-192.png">
 <style>
 :root{--bg:#f6f7f9;--card:#fff;--tx:#1d2330;--mut:#6b7280;--ln:#e3e6eb;--ac:#1f6f4a;--acl:#e6f3ec}
@@ -27,40 +27,40 @@ h1 small{font-size:12px;font-weight:400;color:var(--mut);margin-left:6px}
 .bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .bar .mut{font-size:12px;color:var(--mut);margin-left:auto}
 </style></head><body><main>
-<h1>JR Verwysings<small>v26.1</small></h1>
+<h1>JR References<small>v26.2</small></h1>
+<div class="card">
+ <div class="row" style="margin-bottom:10px">
+  <label>Export<select id="xs"><option value="all">All books</option><option value="cur">Current book</option><option value="q">Search results</option></select></label>
+  <label>From<input type="date" id="xf"></label>
+  <label>To<input type="date" id="xt"></label>
+  <button id="ex">Export to Excel (CSV)</button>
+ </div>
+ <div class="bar">
+  <button class="pri" id="bu">Create backup</button>
+  <button id="rs">Restore from backup</button>
+  <input type="file" id="rf" accept=".json,application/json" hidden>
+  <span class="mut" id="lb"></span>
+ </div>
+</div>
 <div class="card">
  <div class="row">
-  <label>Boek<select id="bk"></select></label>
-  <label>Voorvoegsel<input id="pf" size="8"></label>
-  <div style="margin-left:8px"><div style="font-size:12px;color:var(--mut)">Volgende nommer</div><div class="next" id="nx"></div></div>
+  <label>Book<select id="bk"></select></label>
+  <label>Prefix<input id="pf" size="8"></label>
+  <div style="margin-left:8px"><div style="font-size:12px;color:var(--mut)">Next number</div><div class="next" id="nx"></div></div>
  </div>
  <div class="row" style="margin-top:12px">
-  <label>Datum<input type="date" id="dt"></label>
-  <label class="grow">Omskrywing<input id="om" placeholder="bv. skuif nkosana diesel na suppliers"></label>
-  <button class="pri" id="go">Ken JR nr toe</button>
+  <label>Date<input type="date" id="dt"></label>
+  <label class="grow">Description<input id="om" placeholder="e.g. move nkosana diesel to suppliers"></label>
+  <button class="pri" id="go">Assign JR no.</button>
  </div>
  <div class="ok" id="ok"></div>
 </div>
 <div class="card">
  <div class="row" style="margin-bottom:10px">
-  <label class="grow">Soek<input id="q" placeholder="nommer of omskrywing"></label>
-  <div class="tools"><button id="nb">+ Nuwe boek</button></div>
+  <label class="grow">Search<input id="q" placeholder="number or description"></label>
+  <div class="tools"><button id="nb">+ New book</button></div>
  </div>
- <div class="wrap"><table><thead><tr><th>JR Nr</th><th>Datum</th><th>Boek</th><th>Omskrywing</th><th></th></tr></thead><tbody id="tb"></tbody></table></div>
-</div>
-<div class="card">
- <div class="row" style="margin-bottom:10px">
-  <label>Uitvoer<select id="xs"><option value="all">Alle boeke</option><option value="cur">Huidige boek</option><option value="q">Soekresultate</option></select></label>
-  <label>Van<input type="date" id="xf"></label>
-  <label>Tot<input type="date" id="xt"></label>
-  <button id="ex">Uitvoer na Excel (CSV)</button>
- </div>
- <div class="bar">
-  <button class="pri" id="bu">Rugsteun maak</button>
-  <button id="rs">Herstel uit rugsteun</button>
-  <input type="file" id="rf" accept=".json,application/json" hidden>
-  <span class="mut" id="lb"></span>
- </div>
+ <div class="wrap"><table><thead><tr><th>JR No.</th><th>Date</th><th>Book</th><th>Description</th><th></th></tr></thead><tbody id="tb"></tbody></table></div>
 </div>
 </main>
 <script>
@@ -80,7 +80,7 @@ function render(){
  $('pf').value=S.books[S.cur];$('nx').textContent=nextNo(S.cur);
  const q=$('q').value.toLowerCase();
  $('tb').innerHTML=S.rows.map((r,i)=>[r,i]).filter(([r])=>!q||(r.jr+' '+r.o).toLowerCase().includes(q)).reverse()
-  .map(([r,i])=>`<tr><td class="jr">${r.jr}</td><td>${fmt(r.d)}</td><td>${r.bk}</td><td>${r.o.replace(/</g,'&lt;')}</td><td><button class="x" data-i="${i}" title="Verwyder">✕</button></td></tr>`).join('');
+  .map(([r,i])=>`<tr><td class="jr">${r.jr}</td><td>${fmt(r.d)}</td><td>${r.bk}</td><td>${r.o.replace(/</g,'&lt;')}</td><td><button class="x" data-i="${i}" title="Delete">✕</button></td></tr>`).join('');
 }
 $('dt').value=new Date().toISOString().slice(0,10);
 $('bk').onchange=e=>{S.cur=e.target.value;save();render()};
@@ -89,31 +89,31 @@ $('q').oninput=render;
 $('go').onclick=()=>{const o=$('om').value.trim();if(!o){$('om').focus();return}
  const jr=nextNo(S.cur);S.rows.push({d:$('dt').value,bk:S.cur,jr,o});save();
  $('om').value='';$('ok').style.display='block';
- $('ok').innerHTML=`Toegeken: <b>${jr}</b> — ${o.replace(/</g,'&lt;')} <button id="cp">Kopieer</button>`;
+ $('ok').innerHTML=`Assigned: <b>${jr}</b> — ${o.replace(/</g,'&lt;')} <button id="cp">Copy</button>`;
  $('cp').onclick=()=>navigator.clipboard.writeText(jr);render()};
 $('om').onkeydown=e=>{if(e.key==='Enter')$('go').click()};
 $('tb').onclick=e=>{const i=e.target.dataset.i;if(i==null)return;
- if(confirm('Verwyder '+S.rows[i].jr+'?')){S.rows.splice(i,1);save();render()}};
-$('nb').onclick=()=>{const b=prompt('Naam van boek (bv. MVK27):');if(!b)return;
- const p=prompt('Voorvoegsel (bv. 2027N-):','');S.books[b]=p||'';S.cur=b;save();render()};
+ if(confirm('Delete '+S.rows[i].jr+'?')){S.rows.splice(i,1);save();render()}};
+$('nb').onclick=()=>{const b=prompt('Book name (e.g. MVK27):');if(!b)return;
+ const p=prompt('Prefix (e.g. 2027N-):','');S.books[b]=p||'';S.cur=b;save();render()};
 function dl(data,type,name){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type}));a.download=name;a.click()}
 const today=()=>new Date().toISOString().slice(0,10);
 $('ex').onclick=()=>{const c=v=>'"'+String(v).replace(/"/g,'""')+'"';
  const s=$('xs').value,q=$('q').value.toLowerCase(),f=$('xf').value,t=$('xt').value;
  const rows=S.rows.filter(r=>(s!=='cur'||r.bk===S.cur)&&(s!=='q'||!q||(r.jr+' '+r.o).toLowerCase().includes(q))&&(!f||r.d>=f)&&(!t||r.d<=t));
- if(!rows.length){alert('Geen inskrywings om uit te voer nie.');return}
- const csv='﻿JR Datum;Boek;JR Nr;Omskrywing\n'+rows.map(r=>[fmt(r.d),r.bk,r.jr,r.o].map(c).join(';')).join('\n');
- dl(csv,'text/csv','Joernaal Verwysings'+(s==='cur'?' '+S.cur:'')+' '+today()+'.csv')};
-function showLb(){$('lb').textContent=S.lastBackup?'Laaste rugsteun: '+fmt(S.lastBackup):'Nog geen rugsteun gemaak nie'}
+ if(!rows.length){alert('No entries to export.');return}
+ const csv='﻿JR Date;Book;JR No.;Description\n'+rows.map(r=>[fmt(r.d),r.bk,r.jr,r.o].map(c).join(';')).join('\n');
+ dl(csv,'text/csv','Journal References'+(s==='cur'?' '+S.cur:'')+' '+today()+'.csv')};
+function showLb(){$('lb').textContent=S.lastBackup?'Last backup: '+fmt(S.lastBackup):'No backup made yet'}
 $('bu').onclick=()=>{S.lastBackup=today();save();showLb();
- dl(JSON.stringify({app:'JR Nommers',version:'26.1',date:today(),data:S},null,1),'application/json','JR Rugsteun '+today()+'.json')};
+ dl(JSON.stringify({app:'JR Numbers',version:'26.2',date:today(),data:S},null,1),'application/json','JR Backup '+today()+'.json')};
 $('rs').onclick=()=>$('rf').click();
 $('rf').onchange=async e=>{const fl=e.target.files[0];e.target.value='';if(!fl)return;
  try{const j=JSON.parse(await fl.text()),d=j.data||j;
   if(!Array.isArray(d.rows)||!d.books)throw 0;
-  if(!confirm('Vervang alle huidige data ('+S.rows.length+' inskrywings) met die rugsteun ('+d.rows.length+' inskrywings)?'))return;
-  S=d;if(!S.books[S.cur])S.cur=Object.keys(S.books)[0];save();render();showLb();alert('Rugsteun herstel.')}
- catch(err){alert('Kon nie die rugsteunlêer lees nie.')}};
+  if(!confirm('Replace all current data ('+S.rows.length+' entries) with the backup ('+d.rows.length+' entries)?'))return;
+  S=d;if(!S.books[S.cur])S.cur=Object.keys(S.books)[0];save();render();showLb();alert('Backup restored.')}
+ catch(err){alert('Could not read the backup file.')}};
 render();showLb();
 if('serviceWorker' in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('sw.js');
 </script></body></html>

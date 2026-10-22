@@ -1,14 +1,14 @@
-# JR Nommers — v26.1
+﻿# JR Numbers — v26.2
 
-Ken joernaalverwysings (JR) nommers toe en hou rekord daarvan.
+Assign journal reference (JR) numbers and keep a record of them.
 
-## Installeer op die desktop
-1. Maak die app oop by https://keer4021.github.io/Maluti-Journal-Nr/ in Edge of Chrome.
-2. Klik die **Installeer**-ikoon regs in die adresbalk (of menu **⋯ → Apps → Installeer hierdie werf as 'n app**).
-3. Die app kry 'n eie venster, 'n desktop-/Start-kortpad en werk ook sonder internet.
+## Install on the desktop
+1. Open the app at https://keer4021.github.io/Maluti-Journal-Nr/ in Edge or Chrome.
+2. Click the **Install** icon on the right of the address bar (or menu **⋯ → Apps → Install this site as an app**).
+3. The app gets its own window, a desktop/Start shortcut, and also works offline.
 
-## Rugsteun en uitvoer
-- **Rugsteun maak** laai 'n `.json`-lêer af met al die data. **Herstel uit rugsteun** laai dit weer in.
-- **Uitvoer na Excel (CSV)** kan alle boeke, net die huidige boek of die soekresultate uitvoer, met 'n opsionele datumreeks.
+## Backup and export
+- **Create backup** downloads a `.json` file with all data. **Restore from backup** loads it back in.
+- **Export to Excel (CSV)** exports all books, only the current book, or the search results, with an optional date range.
 
-Data word plaaslik in die blaaier/app gestoor; maak gereeld 'n rugsteun.
+Data is stored locally in the browser/app; make a backup regularly.
